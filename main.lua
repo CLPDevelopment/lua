@@ -1,28 +1,23 @@
-local fs = require("filesystem")
+-- Import this library
+local GUI = require("GUI")
+-- We will also need downloaded double buffering library to render rectangles
+local screen = require("Screen")
 
--- Funktion, um den Computer zu löschen
-function deleteComputer()
-    -- Bestätigungsaufforderung
-    print("Möchtest du alle Dateien im Computer wirklich löschen? (ja/nein)")
-    local confirmation = io.read()
+--------------------------------------------------------------------------------
 
-    if confirmation == "ja" then
-        local path = "/"
+-- Create new workspace
+local workspace = GUI.workspace()
 
-        -- Alle Dateien im Computer-Verzeichnis löschen
-        for file in fs.list(path) do
-            local filePath = path .. file
-            if fs.isDirectory(filePath) then
-                fs.remove(filePath) -- Entfernt das Verzeichnis
-            else
-                fs.remove(filePath) -- Entfernt die Datei
-            end
-        end
-        print("Alle Dateien wurden gelöscht.")
-    else
-        print("Löschvorgang abgebrochen.")
-    end
+-- Create and add template object to workspace
+local object = workspace:addChild(GUI.object(3, 2, 50, 10))
+-- Create own :draw() method and make it render green rectangle
+object.draw = function(object)
+	screen.drawRectangle(object.x, object.y, object.width, object.height, 0x33FF80, 0x0, " ")
 end
 
--- Hauptprogramm starten
-deleteComputer()
+--------------------------------------------------------------------------------
+
+-- Draw workspace content once on screen when program starts
+workspace:draw()
+-- Start processing events for workspace
+workspace:start()
