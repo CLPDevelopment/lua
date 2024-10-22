@@ -1,18 +1,25 @@
--- Script: Inventory Viewer
--- Zeigt den Inhalt des ausgewählten Inventarplatzes an und kopiert es in den Chat
+local fs = require("filesystem")
 
-function getItemDetails()
-    local slot = turtle.getSelectedSlot() -- Wählt den aktuellen Inventarplatz aus
-    local item = turtle.getItemDetail(slot) -- Holt die Details des Items
+-- Funktion, um den Computer zu löschen
+function deleteComputer()
+    -- Aktuellen Computer-UUID abrufen
+    local computerID = computer.getID()
 
-    if item then
-        -- Gibt die Item-Details aus
-        print("Item Name: " .. item.name)
-        print("Item Count: " .. item.count)
-        -- Hier könntest du eine Funktion hinzufügen, um das Item in den Chat zu kopieren
+    -- Bestätigungsaufforderung
+    print("Möchtest du den Computer mit der ID " .. computerID .. " wirklich löschen? (ja/nein)")
+    local confirmation = io.read()
+
+    if confirmation == "ja" then
+        -- Alle Dateien im Computer-Verzeichnis löschen
+        local path = "/"
+        for file in fs.list(path) do
+            fs.remove(path .. file)
+        end
+        print("Computer wurde gelöscht.")
     else
-        print("Kein Item im aktuellen Slot.")
+        print("Löschvorgang abgebrochen.")
     end
 end
 
-getItemDetails()
+-- Hauptprogramm starten
+deleteComputer()
