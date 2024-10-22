@@ -2,20 +2,23 @@ local fs = require("filesystem")
 
 -- Funktion, um den Computer zu löschen
 function deleteComputer()
-    -- Aktuellen Computer-UUID abrufen
-    local computerID = computer.getID()
-
     -- Bestätigungsaufforderung
-    print("Möchtest du den Computer mit der ID " .. computerID .. " wirklich löschen? (ja/nein)")
+    print("Möchtest du alle Dateien im Computer wirklich löschen? (ja/nein)")
     local confirmation = io.read()
 
     if confirmation == "ja" then
-        -- Alle Dateien im Computer-Verzeichnis löschen
         local path = "/"
+
+        -- Alle Dateien im Computer-Verzeichnis löschen
         for file in fs.list(path) do
-            fs.remove(path .. file)
+            local filePath = path .. file
+            if fs.isDirectory(filePath) then
+                fs.remove(filePath) -- Entfernt das Verzeichnis
+            else
+                fs.remove(filePath) -- Entfernt die Datei
+            end
         end
-        print("Computer wurde gelöscht.")
+        print("Alle Dateien wurden gelöscht.")
     else
         print("Löschvorgang abgebrochen.")
     end
